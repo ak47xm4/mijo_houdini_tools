@@ -1,5 +1,15 @@
 # fusion style houdini local cache
-# by mijo1992
+# by mijo
+
+'''
+Function 20221119 :
+    
+    copy filecache files to local
+    and create file node to read cache
+    
+    in blackmagic fusion style OTZ
+    
+'''
 
 import os
 
