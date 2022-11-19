@@ -23,6 +23,8 @@ future features :
     create comment to record
         copy time
     
+    compare difference
+    
     use take to control
         switch orinal and local
         efficent to use , preview
