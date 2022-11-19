@@ -2,13 +2,32 @@
 # by mijo
 
 '''
-Function 20221119 :
-    
+roadmap:
+    efficent to use , preview
+
+features 20221119 :
     copy filecache files to local
     and create file node to read cache
     
     in blackmagic fusion style OTZ
+
+future features :
+    local to network  and  network to local
+    easy to define where is copy to
+        now is using LocalCache_path to define 
+        
+    smart to know where is copy from
     
+    more speed more performance
+    
+    create comment to record
+        copy time
+    
+    use take to control
+        switch orinal and local
+        efficent to use , preview
+        netwrok render farm friendly
+        
 '''
 
 import os
