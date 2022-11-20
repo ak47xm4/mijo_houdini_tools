@@ -6,7 +6,8 @@ roadmap:
     click and show the node info I want
 
 features 20221120 :
-    
+    ROP:
+        fetch
 
 future features :
     show nodes info
