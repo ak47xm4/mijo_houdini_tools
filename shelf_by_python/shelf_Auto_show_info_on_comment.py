@@ -1,4 +1,4 @@
-# fusion style houdini local cache
+# 
 # by mijo
 
 '''
