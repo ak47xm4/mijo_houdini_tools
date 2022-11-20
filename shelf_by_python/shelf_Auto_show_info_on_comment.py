@@ -11,6 +11,9 @@ features 20221120 :
 
 future features :
     show nodes info
+    
+    ctrl shift alt function
+    
 '''
 
 import hou
