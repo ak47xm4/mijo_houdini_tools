@@ -32,6 +32,11 @@ future features :
         
 '''
 
+'''
+video (tutorial?) :
+https://www.youtube.com/watch?v=ukIjS8A3gsQ
+'''
+
 import os
 
 import shutil
