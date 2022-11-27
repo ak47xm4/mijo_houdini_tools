@@ -155,6 +155,7 @@ for n in nodes :
         
         # copy files 0020
         if path_defined :
+            # legacy less speed and hard to use
             '''
             with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
                 src_files_len = len(src_files)
@@ -169,13 +170,11 @@ for n in nodes :
                     precent = float(i)/float(src_files_len)
                     operation.updateProgress(precent)
             '''
+            # src_files_len = len(src_files)
             
-            src_files_len = len(src_files)
-            
-            # copy_cmd = []
-            copy_cmd = ''
-            # copy_cmd = 'bash -c "'
-            # copy_cmd.append('cmd.exe')
+            # new copy method for win 
+            copy_cmd_list = ['']
+            cmd_safe_arg_len_index = 0
             
             for file_name in src_files:
                 full_file_name = os.path.join(src, file_name)
@@ -183,21 +182,25 @@ for n in nodes :
                 cmd_copy_src = cmd_copy_src.replace('/','\\')
                 cmd_copy_dst = dest+'/'+file_name
                 cmd_copy_dst = cmd_copy_dst.replace('/','\\')
-                # copy_cmd.append('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" ') #+' \r\n'
-                copy_cmd += ('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" & ') #+' \r\n'
-                # copy_cmd = ('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'"') #+' \r\n'
-                # print(copy_cmd)
-                # status = subprocess.call(copy_cmd, shell=True)
-                # subprocess.Popen(copy_cmd , shell=True)
-                # result = subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
-                # subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
-            # copy_cmd+=' &'
-            # print(copy_cmd)
-            result=subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+                cmd2 = 'copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" & '
                 
-            print (len(copy_cmd))
-            output,error = result.communicate()
-            print (output)
+                # print(cmd_copy_dst)
+                
+                # there is a limit at cmd arg string length
+                if len(copy_cmd_list[cmd_safe_arg_len_index]) > (8000-len(cmd2)) :
+                    cmd_safe_arg_len_index += 1
+                    copy_cmd_list.append( '' )
+                copy_cmd_list[cmd_safe_arg_len_index] += cmd2
+                    
+                
+            for i in copy_cmd_list:
+                result=subprocess.Popen(i , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+                    
+                # print ('--------------')
+                # print (i)
+                # print (len(i))
+                # output,error = result.communicate()
+                # print (output)
             
             print(str(n.name())+"____copy cache complete")
         #p = subprocess.Popen([py4Trackir,py_log_to_csv], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
