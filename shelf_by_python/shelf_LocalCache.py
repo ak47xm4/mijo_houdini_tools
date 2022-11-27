@@ -24,12 +24,14 @@ future features :
         copy time
     
     compare difference
+    to not copy sam file
     
     use take to control
         switch orinal and local
         efficent to use , preview
         netwrok render farm friendly
         
+    copy in BG
 '''
 
 '''
@@ -44,6 +46,7 @@ import shutil
 
 import hou
 import win32file # need install module
+import subprocess
 from pathlib import Path
 
 LocalCache_path = 'H:/h_cache/'
@@ -152,6 +155,7 @@ for n in nodes :
         
         # copy files 0020
         if path_defined :
+            '''
             with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
                 src_files_len = len(src_files)
                 i=0
@@ -164,8 +168,51 @@ for n in nodes :
                     i +=1 
                     precent = float(i)/float(src_files_len)
                     operation.updateProgress(precent)
+            '''
+            
+            src_files_len = len(src_files)
+            
+            # copy_cmd = []
+            copy_cmd = ''
+            # copy_cmd = 'bash -c "'
+            # copy_cmd.append('cmd.exe')
+            
+            for file_name in src_files:
+                full_file_name = os.path.join(src, file_name)
+                cmd_copy_src = full_file_name
+                cmd_copy_src = cmd_copy_src.replace('/','\\')
+                cmd_copy_dst = dest+'/'+file_name
+                cmd_copy_dst = cmd_copy_dst.replace('/','\\')
+                # copy_cmd.append('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" ') #+' \r\n'
+                copy_cmd += ('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" & ') #+' \r\n'
+                # copy_cmd = ('copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'"') #+' \r\n'
+                # print(copy_cmd)
+                # status = subprocess.call(copy_cmd, shell=True)
+                # subprocess.Popen(copy_cmd , shell=True)
+                # result = subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+                # subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+            # copy_cmd+=' &'
+            # print(copy_cmd)
+            result=subprocess.Popen(copy_cmd , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+                
+            print (len(copy_cmd))
+            output,error = result.communicate()
+            print (output)
             
             print(str(n.name())+"____copy cache complete")
-        
+        #p = subprocess.Popen([py4Trackir,py_log_to_csv], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 print("-----------------------------------")
 print("all complete")
+
+
+
+
+
+
+
+
+
+
+
+
+
