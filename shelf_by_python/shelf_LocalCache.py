@@ -203,7 +203,7 @@ for n in nodes :
                 # print (output)
             
             print(str(n.name())+"____copy cache complete")
-        #p = subprocess.Popen([py4Trackir,py_log_to_csv], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        
 print("-----------------------------------")
 print("all complete")
 
