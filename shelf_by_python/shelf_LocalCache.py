@@ -4,13 +4,7 @@
 '''
 roadmap:
     efficent to use , preview
-
-features 20221119 :
-    copy filecache files to local
-    and create file node to read cache
     
-    in blackmagic fusion style OTZ
-
 future features :
     local to network  and  network to local
     easy to define where is copy to
@@ -18,7 +12,7 @@ future features :
         
     smart to know where is copy from
     
-    more speed more performance
+    #OK+WIP# more speed more performance
     
     create comment to record
         copy time
@@ -32,6 +26,19 @@ future features :
         netwrok render farm friendly
         
     copy in BG
+    
+    work with pdg ?
+    
+features 20221119 :
+    copy filecache files to local
+    and create file node to read cache
+    
+    in blackmagic fusion style OTZ
+
+features 20221127 :
+    function is_netfile
+    more speed more performance
+    
 '''
 
 '''
