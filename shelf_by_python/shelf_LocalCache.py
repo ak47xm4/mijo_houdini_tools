@@ -50,7 +50,8 @@ import subprocess
 from pathlib import Path
 
 LocalCache_path = 'H:/h_cache/'
-
+networkDriverCache_path = '$HIP/geo/'
+networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_path)
 
 nodes = hou.selectedNodes()
 ##############################################################################################################
@@ -106,8 +107,8 @@ for n in nodes :
         filename = n.parm("file").eval() # eval file cache path
         
         # test network driver
-        # print('is_netfile : ')
-        print(file_node_Name+' == netfile : ' + str( is_netfile(filename) ))
+        cache_is_on_netDriver = is_netfile(filename)
+        print(file_node_Name+' == netfile : ' + str( cache_is_on_netDriver ))
         
         # node position
         node_pos = n.position()
