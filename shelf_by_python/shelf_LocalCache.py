@@ -43,12 +43,34 @@ import shutil
 # import pyfastcopy # faster!!!!
 
 import hou
+import win32file # need install module
 from pathlib import Path
 
 LocalCache_path = 'H:/h_cache/'
 
 
 nodes = hou.selectedNodes()
+##############################################################################################################
+# functions
+
+def is_netfile( path ):
+    path = path.replace('\\','/')
+    ddd = path.split('/')
+    ddd = ddd[0]
+    ddd += '\\'
+    return win32file.GetDriveType(ddd) == win32file.DRIVE_REMOTE
+    # return win32file.GetDriveType(path) == win32file.DRIVE_FIXED
+    
+
+
+
+
+
+
+
+
+# functions
+##############################################################################################################
 
 print("-----------------------------------")
 
@@ -76,15 +98,13 @@ for n in nodes :
             file_node_Exist = False
         else:
             # the node does exist
-            
             file_node_Exist = True
-        
         
         filename = n.parm("file").eval() # eval file cache path
         
-        # filename_RAW = n.parm("file").evalAsString()
-        # filename_RAW = n.parm("file").unexpandedString()
-        # filename_RAW_files_name = filename_RAW.split('/')[-1]
+        # test network driver
+        # print('is_netfile : ')
+        print(file_node_Name+' == netfile : ' + str( is_netfile(filename) ))
         
         # node position
         node_pos = n.position()
@@ -100,7 +120,7 @@ for n in nodes :
         # fusion style local cache
         local_cache_filename_dir = cache_files_dir.replace('/','!')
         local_cache_filename_dir = local_cache_filename_dir.replace(':','')
-        #print(local_cache_filename_dir)
+        # print(local_cache_filename_dir)
         local_cache_file_dir = LocalCache_path+local_cache_filename_dir+'/'
         
         # temporary method
@@ -118,22 +138,34 @@ for n in nodes :
         if not os.path.exists(local_cache_file_dir):
             os.makedirs(local_cache_file_dir)
             
-        # copy files
-        src_files = os.listdir(src)
-        with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
-            src_files_len = len(src_files)
-            i=0
-            for file_name in src_files:
-                full_file_name = os.path.join(src, file_name)
-                if (os.path.isfile(full_file_name)):
-                    # shutil.copy(full_file_name, dest)
-                    shutil.copyfile(full_file_name, dest+'/'+file_name)
-                    
-                i +=1 
-                precent = float(i)/float(src_files_len)
-                operation.updateProgress(precent)
+        # copy files 0010
         
-        print(str(n.name())+"____copy cache complete")
+        # check empty ?
+        path_defined = True
+        try:
+            src_files = os.listdir(src)
+        except:
+            empty_message = '!!!! nothing in "'+name+'"'
+            hou.ui.displayMessage(empty_message)
+            print(empty_message)
+            path_defined = False
+        
+        # copy files 0020
+        if path_defined :
+            with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
+                src_files_len = len(src_files)
+                i=0
+                for file_name in src_files:
+                    full_file_name = os.path.join(src, file_name)
+                    if (os.path.isfile(full_file_name)):
+                        # shutil.copy(full_file_name, dest)
+                        shutil.copyfile(full_file_name, dest+'/'+file_name)
+                        
+                    i +=1 
+                    precent = float(i)/float(src_files_len)
+                    operation.updateProgress(precent)
+            
+            print(str(n.name())+"____copy cache complete")
         
 print("-----------------------------------")
 print("all complete")
