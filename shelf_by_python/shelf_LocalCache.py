@@ -2,6 +2,12 @@
 # by mijo
 
 '''
+test env:
+    houdini 19.5.368
+    qlib
+    labs
+
+
 roadmap:
     efficent to use , preview
     
@@ -42,6 +48,10 @@ features 20221127 :
     
 not slove yet:
     only supprot $F.bgeo.sc NOW
+    
+    manual define local driver
+    or
+    use win32 module
 
 '''
 
@@ -66,6 +76,7 @@ LocalCache_path = 'H:/h_cache/'
 networkDriverCache_path = '$HIP/geo/'
 networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_path)
 
+# manual define local driver
 localDrivers = ['C:','D:','E:','F:','H:','I:']
 
 # start
