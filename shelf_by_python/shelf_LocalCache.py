@@ -12,16 +12,13 @@ roadmap:
     efficent to use , preview
     
 future features :
-    local to network  and  network to local
     easy to define where is copy to
         now is using LocalCache_path to define 
         
     smart to know where is copy from
     
-    #OK+WIP# more speed more performance
-    
     create comment to record
-        copy time
+        copy time?
     
     compare difference
     to not copy sam file
@@ -31,10 +28,14 @@ future features :
         efficent to use , preview
         netwrok render farm friendly
         
-    copy in BG
+
     
     work with pdg ?
-    
+done future features :
+    #OK+WIP# local to network  and  network to local
+    #OK+WIP# more speed more performance
+    #OK+WIP# copy in BG
+
 features 20221119 :
     copy filecache files to local
     and create file node to read cache
@@ -44,6 +45,11 @@ features 20221119 :
 features 20221127 :
     function is_netfile
     more speed more performance
+    copy in BG
+    
+features 20221203 :
+    manual define local driver
+    copy in BG
     
     
 not slove yet:
@@ -172,12 +178,22 @@ for n in nodes :
         
         # path to copy files
         src = cache_files_dir
-        dest = goal_cache_file_dir
+        if cache_is_on_netDriver :
+            dest = goal_cache_file_dir
+        else:
+            dest = hou.text.expandString(goal_cache_file_dir)
         
         # create folder
-        if not os.path.exists(goal_cache_file_dir):
-            os.makedirs(goal_cache_file_dir)
-            
+        if not os.path.exists(dest):
+            if cache_is_on_netDriver :
+                os.makedirs(dest)
+            else:
+                print('dest')
+                print(dest)
+                try:
+                    os.makedirs(dest)
+                except:
+                    print('net_path_exist~~~~')
         # copy files 0010
         
         # check empty ?
