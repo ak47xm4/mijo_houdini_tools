@@ -50,6 +50,8 @@ video (tutorial?) :
 https://www.youtube.com/watch?v=ukIjS8A3gsQ
 '''
 
+##############################################################################################################
+# start
 import os
 
 import shutil
@@ -66,7 +68,7 @@ networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_
 
 localDrivers = ['C:','D:','E:','F:','H:','I:']
 
-nodes = hou.selectedNodes()
+# start
 ##############################################################################################################
 # functions
 '''
@@ -92,6 +94,8 @@ def is_netfile( path ):
 # process
 
 print("-----------------------------------")
+
+nodes = hou.selectedNodes()
 
 for n in nodes :
     #print(n.name())
