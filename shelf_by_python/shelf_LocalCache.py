@@ -25,7 +25,7 @@ future features :
     
     work with pdg 
     
-done future features :
+done features :
     #OK+WIP# local to network  and  network to local
     #OK+WIP# more speed more performance
     #OK+WIP# copy in BG
