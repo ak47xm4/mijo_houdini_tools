@@ -39,6 +39,10 @@ features 20221127 :
     function is_netfile
     more speed more performance
     
+    
+not slove yet:
+    only supprot $F.bgeo.sc NOW
+
 '''
 
 '''
@@ -60,6 +64,8 @@ LocalCache_path = 'H:/h_cache/'
 networkDriverCache_path = '$HIP/geo/'
 networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_path)
 
+localDrivers = ['C:','D:','E:','F:','H:','I:']
+
 nodes = hou.selectedNodes()
 ##############################################################################################################
 # functions
@@ -77,17 +83,13 @@ def is_netfile( path ):
     path = path.replace('\\','/')
     ddd = path.split('/')
     ddd = ddd[0]
-    ddd += '\\'
-    return win32file.GetDriveType(ddd) == win32file.DRIVE_REMOTE
+    return ddd not in localDrivers
     # return win32file.GetDriveType(path) == win32file.DRIVE_FIXED
-
-
-
-
 
 
 # functions
 ##############################################################################################################
+# process
 
 print("-----------------------------------")
 
@@ -138,10 +140,17 @@ for n in nodes :
         local_cache_filename_dir = cache_files_dir.replace('/','!')
         local_cache_filename_dir = local_cache_filename_dir.replace(':','')
         # print(local_cache_filename_dir)
-        local_cache_file_dir = LocalCache_path+local_cache_filename_dir+'/'
+        
+        goal_cache_file_dir = ''
+        
+        if cache_is_on_netDriver :
+            goal_cache_file_dir = LocalCache_path+local_cache_filename_dir+'/'
+        else:
+            goal_cache_file_dir = networkDriverCache_path +local_cache_filename_dir+'/'
         
         # temporary method
-        local_cache_filename = local_cache_file_dir+cfn_split[0]+'.'+'$F'+'.'+cfn_split[-2]+'.'+cfn_split[-1]
+        # for xxxx.bgeo.sc
+        local_cache_filename = goal_cache_file_dir+cfn_split[0]+'.'+'$F'+'.'+cfn_split[-2]+'.'+cfn_split[-1]
         #print(local_cache_filename)
         
         # set file node file parm
@@ -149,11 +158,11 @@ for n in nodes :
         
         # path to copy files
         src = cache_files_dir
-        dest = local_cache_file_dir
+        dest = goal_cache_file_dir
         
         # create folder
-        if not os.path.exists(local_cache_file_dir):
-            os.makedirs(local_cache_file_dir)
+        if not os.path.exists(goal_cache_file_dir):
+            os.makedirs(goal_cache_file_dir)
             
         # copy files 0010
         
@@ -169,8 +178,10 @@ for n in nodes :
         
         # copy files 0020
         if path_defined :
-            # legacy less speed and hard to use
+            
             '''
+            # legacy less speed and hard to use. low speed
+            
             with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
                 src_files_len = len(src_files)
                 i=0
@@ -183,8 +194,12 @@ for n in nodes :
                     i +=1 
                     precent = float(i)/float(src_files_len)
                     operation.updateProgress(precent)
-            '''
+                    
             # src_files_len = len(src_files)
+            
+            # legacy less speed and hard to use. low speed
+            '''
+            
             
             # new copy method for win 
             copy_cmd_list = ['']
@@ -209,21 +224,17 @@ for n in nodes :
                 
             for i in copy_cmd_list:
                 result=subprocess.Popen(i , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
-                    
-                # print ('--------------')
-                # print (i)
-                # print (len(i))
-                # output,error = result.communicate()
-                # print (output)
+            # new copy method for win 
             
+            print('copy cmd num: '+str(len(copy_cmd_list)))
             print(str(n.name())+"____copy cache complete")
         
 print("-----------------------------------")
-print("all complete")
+print("all complete , wait for lag~~~~~~~")
 
 
 
-
+# process
 
 
 
