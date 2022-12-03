@@ -53,11 +53,10 @@ not slove yet:
     or
     use win32 module
 
-'''
 
-'''
 video (tutorial?) :
 https://www.youtube.com/watch?v=ukIjS8A3gsQ
+
 '''
 
 ##############################################################################################################
