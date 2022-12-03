@@ -2,11 +2,6 @@
 # by mijo
 
 '''
-test env:
-    houdini 19.5.368
-    qlib
-    labs
-
 
 roadmap:
     efficent to use , preview
@@ -27,10 +22,9 @@ future features :
         switch orinal and local
         efficent to use , preview
         netwrok render farm friendly
-        
-
     
-    work with pdg ?
+    work with pdg 
+    
 done future features :
     #OK+WIP# local to network  and  network to local
     #OK+WIP# more speed more performance
@@ -59,6 +53,10 @@ not slove yet:
     or
     use win32 module
 
+test env:
+    houdini 19.5.368
+    qlib
+    labs
 
 video (tutorial?) :
 https://www.youtube.com/watch?v=ukIjS8A3gsQ
