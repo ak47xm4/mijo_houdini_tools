@@ -44,6 +44,7 @@ features 20221127 :
 features 20221203 :
     manual define local driver
     copy in BG
+    $F $T exprssion solved
     
 ##################################################################
 
@@ -110,7 +111,6 @@ def is_netfile( path ):
     ddd = path.split('/')
     ddd = ddd[0]
     return ddd not in localDrivers
-    # return win32file.GetDriveType(path) == win32file.DRIVE_FIXED
 
 
 # functions
