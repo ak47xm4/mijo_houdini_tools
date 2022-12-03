@@ -5,7 +5,7 @@
 
 roadmap:
     efficent to use , preview
-    
+##################################################################
 future features :
     easy to define where is copy to
         now is using LocalCache_path to define 
@@ -19,7 +19,7 @@ future features :
     to not copy sam file
     
     use take to control
-        switch orinal and local
+        switch original and local
         efficent to use , preview
         netwrok render farm friendly
     
@@ -45,14 +45,15 @@ features 20221203 :
     manual define local driver
     copy in BG
     
-    
+##################################################################
+
 not slove yet:
     only supprot $F.bgeo.sc NOW
     
     manual define local driver
     or
     use win32 module
-
+##################################################################
 test env:
     houdini 19.5.368
     qlib
@@ -75,6 +76,7 @@ import hou
 import subprocess
 from pathlib import Path
 
+# manual define
 LocalCache_path = 'H:/h_cache/'
 networkDriverCache_path = '$HIP/geo/'
 networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_path)
