@@ -54,6 +54,11 @@ not slove yet:
     or
     use win32 module
     
+    just support 
+        $F $FF $F2~? 
+        $T
+        now
+    
 ##################################################################
 test env:
     houdini 19.5.368
@@ -70,14 +75,14 @@ https://www.youtube.com/watch?v=ukIjS8A3gsQ
 ##############################################################################################################
 # start
 import os
-
-import shutil
-# import pyfastcopy # faster!!!!
-
 import hou
-# import win32file # need install module
 import subprocess
 from pathlib import Path
+
+# import re
+# import shutil
+# import pyfastcopy # faster!!!!
+# import win32file # need install module
 
 # manual define
 LocalCache_path = 'H:/h_cache/'
@@ -143,6 +148,7 @@ for n in nodes :
             file_node_Exist = True
         
         filename = n.parm("file").eval() # eval file cache path
+        filename_unexpandedString = n.parm("file").unexpandedString() # eval file cache path
         
         # test network driver
         cache_is_on_netDriver = is_netfile(filename)
@@ -158,6 +164,7 @@ for n in nodes :
         cache_files_dir = cache_files_dir.replace('\\','/') # fuck \
         cache_files_name = os.path.basename(filename) # get file name
         cfn_split = cache_files_name.split('.') #cache_files_name_split_list    shortly
+        cfn_split_expandString = filename_unexpandedString.split('.') #cache_files_name_split_list    shortly
         
         # fusion style local cache
         local_cache_filename_dir = cache_files_dir.replace('/','!')
@@ -171,13 +178,30 @@ for n in nodes :
         else:
             goal_cache_file_dir = networkDriverCache_path +local_cache_filename_dir+'/'
         
+        # get $F rule
+        the_F_expression = ''
+        
+        for i in cfn_split_expandString :
+            # print(i)
+            if i.startswith('$F'):
+                the_F_expression = i 
+                break
+            if i=='$T':
+                the_F_expression = i 
+                break
+        
+        
         # temporary method
-        # for xxxx.bgeo.sc
-        local_cache_filename = goal_cache_file_dir+cfn_split[0]+'.'+'$F'+'.'+cfn_split[-2]+'.'+cfn_split[-1]
+        if cache_files_name.endswith('.bgeo.sc') :
+            # for xxxx.bgeo.sc
+            goal_cache_filename = goal_cache_file_dir+cfn_split[0]+'.'+the_F_expression+'.bgeo.sc'
+        else:
+            goal_cache_filename = goal_cache_file_dir+cfn_split[0]+'.'+the_F_expression+'.'+cfn_split[-1]
+        
         #print(local_cache_filename)
         
         # set file node file parm
-        file_node.parm("file").set(local_cache_filename)
+        file_node.parm("file").set(goal_cache_filename)
         
         # path to copy files
         src = cache_files_dir
@@ -263,7 +287,7 @@ for n in nodes :
             print('copy cmd num: '+str(len(copy_cmd_list)))
             print(str(n.name())+"____copy cache complete")
         
-print("-----------------------------------")
+            print("-----------------------------------")
 print("all complete , wait for lag~~~~~~~")
 
 
