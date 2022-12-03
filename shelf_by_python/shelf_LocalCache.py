@@ -4,13 +4,7 @@
 '''
 roadmap:
     efficent to use , preview
-
-features 20221119 :
-    copy filecache files to local
-    and create file node to read cache
     
-    in blackmagic fusion style OTZ
-
 future features :
     local to network  and  network to local
     easy to define where is copy to
@@ -18,18 +12,33 @@ future features :
         
     smart to know where is copy from
     
-    more speed more performance
+    #OK+WIP# more speed more performance
     
     create comment to record
         copy time
     
     compare difference
+    to not copy sam file
     
     use take to control
         switch orinal and local
         efficent to use , preview
         netwrok render farm friendly
         
+    copy in BG
+    
+    work with pdg ?
+    
+features 20221119 :
+    copy filecache files to local
+    and create file node to read cache
+    
+    in blackmagic fusion style OTZ
+
+features 20221127 :
+    function is_netfile
+    more speed more performance
+    
 '''
 
 '''
@@ -43,12 +52,42 @@ import shutil
 # import pyfastcopy # faster!!!!
 
 import hou
+# import win32file # need install module
+import subprocess
 from pathlib import Path
 
 LocalCache_path = 'H:/h_cache/'
-
+networkDriverCache_path = '$HIP/geo/'
+networkDriverCache_path_expandString = hou.text.expandString(networkDriverCache_path)
 
 nodes = hou.selectedNodes()
+##############################################################################################################
+# functions
+'''
+def is_netfile( path ):
+    path = path.replace('\\','/')
+    ddd = path.split('/')
+    ddd = ddd[0]
+    ddd += '\\'
+    return win32file.GetDriveType(ddd) == win32file.DRIVE_REMOTE
+    # return win32file.GetDriveType(path) == win32file.DRIVE_FIXED
+'''
+
+def is_netfile( path ):
+    path = path.replace('\\','/')
+    ddd = path.split('/')
+    ddd = ddd[0]
+    ddd += '\\'
+    return win32file.GetDriveType(ddd) == win32file.DRIVE_REMOTE
+    # return win32file.GetDriveType(path) == win32file.DRIVE_FIXED
+
+
+
+
+
+
+# functions
+##############################################################################################################
 
 print("-----------------------------------")
 
@@ -76,15 +115,13 @@ for n in nodes :
             file_node_Exist = False
         else:
             # the node does exist
-            
             file_node_Exist = True
-        
         
         filename = n.parm("file").eval() # eval file cache path
         
-        # filename_RAW = n.parm("file").evalAsString()
-        # filename_RAW = n.parm("file").unexpandedString()
-        # filename_RAW_files_name = filename_RAW.split('/')[-1]
+        # test network driver
+        cache_is_on_netDriver = is_netfile(filename)
+        print(file_node_Name+' == netfile : ' + str( cache_is_on_netDriver ))
         
         # node position
         node_pos = n.position()
@@ -100,7 +137,7 @@ for n in nodes :
         # fusion style local cache
         local_cache_filename_dir = cache_files_dir.replace('/','!')
         local_cache_filename_dir = local_cache_filename_dir.replace(':','')
-        #print(local_cache_filename_dir)
+        # print(local_cache_filename_dir)
         local_cache_file_dir = LocalCache_path+local_cache_filename_dir+'/'
         
         # temporary method
@@ -118,22 +155,81 @@ for n in nodes :
         if not os.path.exists(local_cache_file_dir):
             os.makedirs(local_cache_file_dir)
             
-        # copy files
-        src_files = os.listdir(src)
-        with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
-            src_files_len = len(src_files)
-            i=0
+        # copy files 0010
+        
+        # check empty ?
+        path_defined = True
+        try:
+            src_files = os.listdir(src)
+        except:
+            empty_message = '!!!! nothing in "'+name+'"'
+            hou.ui.displayMessage(empty_message)
+            print(empty_message)
+            path_defined = False
+        
+        # copy files 0020
+        if path_defined :
+            # legacy less speed and hard to use
+            '''
+            with hou.InterruptableOperation("copying cache WIP",open_interrupt_dialog = True) as operation:
+                src_files_len = len(src_files)
+                i=0
+                for file_name in src_files:
+                    full_file_name = os.path.join(src, file_name)
+                    if (os.path.isfile(full_file_name)):
+                        # shutil.copy(full_file_name, dest)
+                        shutil.copyfile(full_file_name, dest+'/'+file_name)
+                        
+                    i +=1 
+                    precent = float(i)/float(src_files_len)
+                    operation.updateProgress(precent)
+            '''
+            # src_files_len = len(src_files)
+            
+            # new copy method for win 
+            copy_cmd_list = ['']
+            cmd_safe_arg_len_index = 0
+            
             for file_name in src_files:
                 full_file_name = os.path.join(src, file_name)
-                if (os.path.isfile(full_file_name)):
-                    # shutil.copy(full_file_name, dest)
-                    shutil.copyfile(full_file_name, dest+'/'+file_name)
+                cmd_copy_src = full_file_name
+                cmd_copy_src = cmd_copy_src.replace('/','\\')
+                cmd_copy_dst = dest+'/'+file_name
+                cmd_copy_dst = cmd_copy_dst.replace('/','\\')
+                cmd2 = 'copy "'+cmd_copy_src+'" "'+cmd_copy_dst+'" & '
+                
+                # print(cmd_copy_dst)
+                
+                # there is a limit at cmd arg string length
+                if len(copy_cmd_list[cmd_safe_arg_len_index]) > (8000-len(cmd2)) :
+                    cmd_safe_arg_len_index += 1
+                    copy_cmd_list.append( '' )
+                copy_cmd_list[cmd_safe_arg_len_index] += cmd2
                     
-                i +=1 
-                precent = float(i)/float(src_files_len)
-                operation.updateProgress(precent)
-        
-        print(str(n.name())+"____copy cache complete")
+                
+            for i in copy_cmd_list:
+                result=subprocess.Popen(i , stdout=subprocess.PIPE, stderr=subprocess.STDOUT , shell=True)
+                    
+                # print ('--------------')
+                # print (i)
+                # print (len(i))
+                # output,error = result.communicate()
+                # print (output)
+            
+            print(str(n.name())+"____copy cache complete")
         
 print("-----------------------------------")
 print("all complete")
+
+
+
+
+
+
+
+
+
+
+
+
+
