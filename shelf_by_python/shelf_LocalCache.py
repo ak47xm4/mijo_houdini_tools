@@ -59,6 +59,8 @@ test env:
     houdini 19.5.368
     qlib
     labs
+    
+    windows 10 21H2
 
 video (tutorial?) :
 https://www.youtube.com/watch?v=ukIjS8A3gsQ
