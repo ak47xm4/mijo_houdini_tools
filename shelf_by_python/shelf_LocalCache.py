@@ -53,6 +53,7 @@ not slove yet:
     manual define local driver
     or
     use win32 module
+    
 ##################################################################
 test env:
     houdini 19.5.368
@@ -194,6 +195,7 @@ for n in nodes :
                     os.makedirs(dest)
                 except:
                     print('net_path_exist~~~~')
+                    
         # copy files 0010
         
         # check empty ?
