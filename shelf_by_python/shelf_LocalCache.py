@@ -11,17 +11,19 @@ future features :
         now is using LocalCache_path to define 
         
     smart to know where is copy from
-    
+        now is using localDrivers to define 
+        
     create comment to record
         copy time?
+        the time at copy
     
     compare difference
-    to not copy sam file
+    to not copy same file
     
     use take to control
-        switch original and local
+        switch netDriver and local
         efficent to use , preview
-        netwrok render farm friendly
+        network render farm friendly
     
     work with pdg 
     
@@ -44,12 +46,15 @@ features 20221127 :
 features 20221203 :
     manual define local driver
     copy in BG
-    $F $T exprssion solved
+    $F $F4 $T exprssion solved
     
 ##################################################################
 
 not slove yet:
-    only supprot $F.bgeo.sc NOW
+    support ext 
+        $F.bgeo.sc 
+        one layer .ext 
+        NOW
     
     manual define local driver
     or
