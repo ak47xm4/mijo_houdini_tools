@@ -5,12 +5,12 @@ import hou
 
 
 def scan_all_camera_nodes(node,cams):
-    # ¦pªG¸`ÂI¬OÄá¼v¾÷Ãş«¬ (cam)¡A«h¿é¥X·í«e¸`ÂI¦WºÙ
+    # å¦‚æœç¯€é»æ˜¯æ”å½±æ©Ÿé¡å‹ (cam)ï¼Œå‰‡è¼¸å‡ºç•¶å‰ç¯€é»åç¨±
     if str( node.type() ) == '<hou.NodeType for Object cam>':
         # print(node.path())
         cams.append(node)
     
-    # »¼°j¹M¾ú©Ò¦³¤l¸`ÂI
+    # éè¿´éæ­·æ‰€æœ‰å­ç¯€é»
     for child_node in node.children():
         scan_all_camera_nodes(child_node,cams)
         
@@ -20,7 +20,7 @@ def batch_set_camera_parameters(parameters):
     
     nodes = hou.selectedNodes()
     
-    # Àò¨ú©Ò¦³ªºÄá¼v¾÷
+    # ç²å–æ‰€æœ‰çš„æ”å½±æ©Ÿ
     # cameras = hou.nodeTypeCategories()['cam']['perspective']
     scan_all_camera_nodes(nodes[0],cams)
     
@@ -28,19 +28,19 @@ def batch_set_camera_parameters(parameters):
     
     # cam = nodes[0]
     
-    # ­¡¥N©Ò¦³Äá¼v¾÷¨Ã³]¸m°Ñ¼Æ
+    # è¿­ä»£æ‰€æœ‰æ”å½±æ©Ÿä¸¦è¨­ç½®åƒæ•¸
     # for cam in cameras.instances():
     for cam in cams:
     # for cam in cam.instances():
         for param, value in parameters.items():
             try:
                 cam.setParms({param: value})
-                print(f"³]¸mÄá¼v¾÷ {cam.name()} ªº {param} °Ñ¼Æ¬° {value}")
+                print(f"è¨­ç½®æ”å½±æ©Ÿ {cam.name()} çš„ {param} åƒæ•¸ç‚º {value}")
             except hou.OperationFailed:
-                print(f"µLªk³]¸mÄá¼v¾÷ {cam.name()} ªº {param} °Ñ¼Æ")
+                print(f"ç„¡æ³•è¨­ç½®æ”å½±æ©Ÿ {cam.name()} çš„ {param} åƒæ•¸")
                 
 
-# ³]¸m°Ñ¼Æ¦r¨å¡A³o¸Ì¥i¥H¦Û¦æ²K¥[©Î­×§ï»İ­n³]¸mªº°Ñ¼Æ©M­È
+# è¨­ç½®åƒæ•¸å­—å…¸ï¼Œé€™è£¡å¯ä»¥è‡ªè¡Œæ·»åŠ æˆ–ä¿®æ”¹éœ€è¦è¨­ç½®çš„åƒæ•¸å’Œå€¼
 camera_parameters = {
     "resx": 2208,
     "resy": 1472,
@@ -48,7 +48,7 @@ camera_parameters = {
     "near": 0.1,
     "far": 10000,
     "shutter": 0.48,
-    # ¦b³o¸Ì²K¥[§ó¦h°Ñ¼Æ©M­È
+    # åœ¨é€™è£¡æ·»åŠ æ›´å¤šåƒæ•¸å’Œå€¼
 }
 
 batch_set_camera_parameters(camera_parameters)
