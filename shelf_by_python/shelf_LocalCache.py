@@ -250,19 +250,16 @@ for n in nodes:
             # 新的robocopy方法
             copy_cmd_list = []
 
-            for file_name in src_files:
-                full_file_name = os.path.join(src, file_name)
-                cmd_copy_src = os.path.dirname(full_file_name)
-                cmd_copy_src = cmd_copy_src.replace('/', '\\')
-                cmd_copy_dst = dest.replace('/', '\\')
-                cmd2 = f'robocopy "{cmd_copy_src}" "{cmd_copy_dst}" "{os.path.basename(full_file_name)}" /MT:8 /NJH /NJS /NC /NS /NP'
-                copy_cmd_list.append(cmd2)
+            # 簡化為複製整個資料夾
+            cmd_copy_src = src.replace('/', '\\')
+            cmd_copy_dst = dest.replace('/', '\\')
+            cmd = f'robocopy "{cmd_copy_src}" "{cmd_copy_dst}" /MT:8 /NJH /NJS /NC /NS /NP'
 
-            for cmd in copy_cmd_list:
-                result = subprocess.Popen(cmd,
-                                          stdout=subprocess.PIPE,
-                                          stderr=subprocess.STDOUT,
-                                          shell=True)
+            # 執行複製命令
+            result = subprocess.Popen(cmd,
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT,
+                                      shell=True)
             # new copy method for win
 
             print('robocopy命令数量: ' + str(len(copy_cmd_list)))
