@@ -47,6 +47,9 @@ features 20221203 :
     copy in BG
     $F $F4 $T exprssion solved
     
+features 20240929 :
+    robocopy 
+    copy in BG
 ##################################################################
 
 not slove yet:
