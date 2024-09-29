@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <toolshelf name="mijo_tools" label="Mijo工具">
+    <memberTool name="LocalCache"/>
+    <memberTool name="PrjAbcCamPreset"/>
+    <memberTool name="AutoShowInfoOnComment"/>
+  </toolshelf>
+
+  <tool name="LocalCache" label="本地缓存" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[
+import shelf_LocalCache
+reload(shelf_LocalCache)
+    ]]></script>
+  </tool>
+
+  <tool name="PrjAbcCamPreset" label="ABC相机预设" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[
+import shelf_prj_abc_cam_preset_1
+reload(shelf_prj_abc_cam_preset_1)
+    ]]></script>
+  </tool>
+
+  <tool name="AutoShowInfoOnComment" label="自动显示注释信息" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[
+import shelf_Auto_show_info_on_comment
+reload(shelf_Auto_show_info_on_comment)
+    ]]></script>
+  </tool>
+</shelfDocument>
