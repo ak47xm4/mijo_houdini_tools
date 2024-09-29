@@ -256,7 +256,7 @@ for n in nodes:
             # 簡化為複製整個資料夾
             cmd_copy_src = src.replace('/', '\\')
             cmd_copy_dst = dest.replace('/', '\\')
-            cmd = f'robocopy "{cmd_copy_src}" "{cmd_copy_dst}" /MT:8 /NJH /NJS /NC /NS /NP'
+            cmd = f'robocopy "{cmd_copy_src}" "{cmd_copy_dst}" /MT:8 /XO /NJH /NJS /NC /NS /NP'
 
             # 執行複製命令
             result = subprocess.Popen(cmd,
