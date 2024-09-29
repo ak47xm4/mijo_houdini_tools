@@ -266,6 +266,6 @@ for n in nodes:
             print(str(n.name()) + "____复制缓存完成")
 
             print("-----------------------------------")
-print("all complete , wait for lag~~~~~~~")
+print("all complete , wait for lag end~~~~~~~")
 
 # process
