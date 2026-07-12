@@ -91,6 +91,14 @@ https://www.youtube.com/watch?v=ukIjS8A3gsQ
 #
 # 使用方式：在網路(SOP 內)選取一個或多個 filecache 節點，執行本工具即可。
 #
+# 【第一次用要先設定「本機快取要放哪」】
+#   本機路徑「不寫死」在腳本裡，而是每臺機器用「環境變數」各自設定，
+#   這樣同一支共用腳本，不同機器(有人 D:、有人 E:)都能用，進 git 也不會互相覆蓋。
+#   - 主要變數：MIJO_LOCALCACHE_PATH  = 快取要複製到本機的哪個資料夾(例如 D:/h_cache/)
+#   - 次要變數：MIJO_NETCACHE_PATH    = 反向操作(本機→網路)時要放的資料夾，可不設
+#   沒設定也沒關係：會自動退回腳本裡的預設值(見下方「手動設定區」)。
+#   詳細設定步驟(系統環境變數 / houdini.env 兩種方式)也寫在「手動設定區」的註解裡。
+#
 # 名詞小抄：
 #   - node(節點)  ：Houdini 網路裡的一個方塊，例如 filecache、file。
 #   - parm(參數)  ：節點上的欄位，例如 filecache 的 "file" 就是它輸出的檔案路徑。
@@ -110,13 +118,32 @@ import subprocess   # 用來啟動外部程式(robocopy)
 from pathlib import Path  # 好用的路徑物件，這裡拿來取得「檔案所在資料夾」
 
 # ---- 手動設定區(想改行為，主要就是改這裡) ----
-# LocalCache_path：當快取原本在「網路磁碟」時，要複製到本機的哪個資料夾。
-#                  請改成你自己本機、空間夠大的磁碟路徑。結尾記得留 '/'。
-LocalCache_path = 'H:/h_cache/'
+#
+# 【路徑改用「環境變數」控制】
+# 每一臺機器/每個 user 的本機磁碟可能都不一樣(有人是 D:、有人是 E:)，
+# 所以這裡「優先讀環境變數」，讓每臺機器自己設定，不用去改這支共用腳本；
+# 如果讀不到環境變數，才退回使用後面寫死的預設值。
+#
+# 怎麼設定環境變數(下面兩種方式擇一即可)：
+#   方式1) Windows 系統環境變數：新增 MIJO_LOCALCACHE_PATH，值填 D:/h_cache/
+#   方式2) Houdini 的 houdini.env 檔加一行： MIJO_LOCALCACHE_PATH = "D:/h_cache/"
+# 這裡用 hou.getenv 讀取(第二個參數就是「抓不到時的預設值」)，
+# 好處是上面兩種設法(系統環境變數 / houdini.env)都抓得到。
 
-# networkDriverCache_path：反向操作用的。當快取原本已經在「本機」時，
-#   工具會把它放到這個路徑。$HIP 是 Houdini 變數，代表目前 hip 檔所在的資料夾。
-networkDriverCache_path = '$HIP/geo/'
+# 當快取原本在「網路磁碟」時，要複製到本機的哪個資料夾：
+LocalCache_path = hou.getenv('MIJO_LOCALCACHE_PATH', 'H:/h_cache/')
+
+# 反向操作用的：當快取原本已經在「本機」時，工具會把它放到這個路徑。
+# 同樣支援環境變數 MIJO_NETCACHE_PATH，抓不到就用預設值。
+# $HIP 是 Houdini 變數，代表目前 hip 檔所在的資料夾。
+networkDriverCache_path = hou.getenv('MIJO_NETCACHE_PATH', '$HIP/geo/')
+
+# 保險：把路徑結尾統一補上一個 '/'。
+# 因為後面會直接把資料夾名接在這個路徑後面，萬一有人在環境變數忘了加斜線，
+# 就會黏成錯的資料夾名(例如 D:/h_cache + H!geo → D:/h_cacheH!geo)。
+# rstrip('/') 先去掉尾端所有斜線，再補剛好一個，確保結尾一定是單一個 '/'。
+LocalCache_path = LocalCache_path.rstrip('/') + '/'
+networkDriverCache_path = networkDriverCache_path.rstrip('/') + '/'
 
 # 本地磁碟改為自動偵測(見 get_local_drivers)。
 # 下面這份清單只當「手動補充」用：若某個磁碟被誤判、或你想強制視為本地，加進來即可。
