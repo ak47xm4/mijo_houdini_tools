@@ -4,4 +4,5 @@ just some self made houdini tools
 
 ## 說明書
 
-- [自動顯示節點資訊（AutoShowInfoOnComment）](docs/AutoShowInfoOnComment.md) 
+- [自動顯示節點資訊（AutoShowInfoOnComment）](docs/AutoShowInfoOnComment.md)
+- [專案預覽（PrjPlayblast）](docs/PrjPlayblast.md)

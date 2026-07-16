@@ -1,0 +1,73 @@
+{
+  "_readme": [
+    "這是 Playblast 工具的專案設定檔範例。",
+    "",
+    "使用方式：",
+    "  1. 複製這個檔案,改成你自己的(例如 P:/config/mijo_project_config.json)。",
+    "  2. 設環境變數 MIJO_PROJECT_CONFIG = 那個檔案的完整路徑。",
+    "  3. 設環境變數 MIJO_PROJECT = 目前專案代號(要對得上下面 projects 底下的 key)。",
+    "",
+    "設定合併順序(後面蓋前面,只蓋有寫到的項目)：",
+    "  腳本內建預設  <-  這裡的 default  <-  這裡的 projects[你的專案]",
+    "所以專案底下只需要寫「跟 default 不一樣」的那幾項,不用整份抄。",
+    "",
+    "極簡寫法：如果你想「一個專案一個 config 檔」,可以把 default/projects 兩層拿掉,",
+    "整個 JSON 直接就是設定本身,例如 { \"resolution\": [1920, 1080], \"fps\": 24 }。",
+    "",
+    "注意:JSON 不支援 // 註解,想寫說明就像這樣塞在 _readme 欄位裡(程式會忽略)。"
+  ],
+
+  "default": {
+    "_readme": "所有專案的共同預設。專案沒特別指定的項目就用這裡的值。",
+
+    "resolution": [1920, 1080],
+    "resolution_scale": 1.0,
+    "use_camera_resolution": false,
+    "pixel_aspect": 1.0,
+
+    "fps": 25,
+    "frame_range": "playbar",
+    "frame_step": 1,
+
+    "output_dir": "$HIP/playblast",
+    "output_name": "{hip}_{camera}_{version}",
+    "format": "mp4",
+    "quality": 20,
+
+    "frame_format": "jpg",
+    "beauty_pass_only": true,
+    "crop_out_view_mask": true,
+
+    "burn_in": true,
+    "burn_in_font": "C:/Windows/Fonts/consola.ttf",
+    "open_after": true,
+    "ffmpeg": ""
+  },
+
+  "projects": {
+    "SHORT_FILM_A": {
+      "_readme": "範例:2K 寬螢幕 24fps 的短片專案,輸出集中放在專案伺服器。",
+      "resolution": [2048, 858],
+      "fps": 24,
+      "output_dir": "P:/SHORT_FILM_A/_playblast/$HIPNAME",
+      "output_name": "SFA_{hip}_{camera}_{version}"
+    },
+
+    "TVC_B": {
+      "_readme": "範例:廣告案,交片要 ProRes,而且解析度一律跟著相機自己的設定走。",
+      "use_camera_resolution": true,
+      "fps": 30,
+      "format": "mov",
+      "output_dir": "P:/TVC_B/playblast",
+      "output_name": "{date}_{hip}_{user}_{version}"
+    },
+
+    "QUICK_TEST": {
+      "_readme": "範例:自己亂測用。半解析度、不燒字幕、出完不自動開,求快。",
+      "resolution_scale": 0.5,
+      "burn_in": false,
+      "open_after": false,
+      "quality": 28
+    }
+  }
+}
