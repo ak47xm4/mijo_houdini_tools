@@ -4,6 +4,7 @@
     <memberTool name="LocalCache"/>
     <memberTool name="PrjAbcCamPreset"/>
     <memberTool name="AutoShowInfoOnComment"/>
+    <memberTool name="SolarisRenderQC"/>
   </toolshelf>
 
   <tool name="LocalCache" label="本地缓存" icon="PLASMA_App">
@@ -22,8 +23,23 @@ reload(shelf_prj_abc_cam_preset_1)
 
   <tool name="AutoShowInfoOnComment" label="自动显示注释信息" icon="PLASMA_App">
     <script scriptType="python"><![CDATA[
+import hou
+# kwargs 只存在於 shelf script 這一層，import 進來的模組拿不到，
+# 所以先放進 hou.session 當「傳遞管道」，讓模組能讀到 ctrl/shift/alt 的按鍵狀態。
+hou.session.mijo_shelf_kwargs = kwargs
 import shelf_Auto_show_info_on_comment
 reload(shelf_Auto_show_info_on_comment)
+    ]]></script>
+  </tool>
+
+  <tool name="SolarisRenderQC" label="渲染检查" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[
+import hou
+# kwargs 只存在於 shelf script 這一層，import 進來的模組拿不到，
+# 所以先放進 hou.session 當「傳遞管道」，讓模組能讀到 ctrl/shift/alt 的按鍵狀態。
+hou.session.mijo_shelf_kwargs = kwargs
+import shelf_Solaris_render_QC
+reload(shelf_Solaris_render_QC)
     ]]></script>
   </tool>
 </shelfDocument>
